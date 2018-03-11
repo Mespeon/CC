@@ -163,7 +163,7 @@ class CCAbout(QMainWindow):
         subHead1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         #Draw subheader 2
-        subHead2 = QLabel('Proponents\n'
+        subHead2 = QLabel('Proponents:\n'
                            + 'Lucky Combinido\nKeysha Pareja\nMark Nolledo', self)
         subHead2.setWordWrap(True);
         subHead2.move(10, banner.height()+(subHead1.height()*2))
