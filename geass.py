@@ -8,7 +8,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 #Import methods from other scripts
-# INSERT TO-DO HERE
+from sibyl import *
+import test2 as tester
 
 class CCMain(QMainWindow):
     #Window initialization
@@ -18,7 +19,7 @@ class CCMain(QMainWindow):
         self.top = 100
         self.left = 100
         self.width = 400
-        self.height = 170
+        self.height = 390
         self.drawUI()
 
     def drawUI(self):
@@ -29,31 +30,39 @@ class CCMain(QMainWindow):
 
         #Draw userbar
         userbar = QLabel(self)
-        pixmap = QPixmap('cc-userbar.png')
+        pixmap = QPixmap('cc-pastel-ubar-resized.png')
         userbar.setPixmap(pixmap)
         userbar.resize(pixmap.width(), pixmap.height())
 
         #Draw status message
         self.statusBar().showMessage('v.1.0 initial')
+        self.statusBar().setFont(QFont("Arial",9,QFont.Normal))
 
         #Draw Import button
         importBtn = QPushButton('Import Image', self)
         importBtn.setToolTip('Import an image into the system.')
         importBtn.resize(125,45)
-        importBtn.move(10,105)
+        importBtn.move(10,userbar.height() + 5)
 
         #Draw Camera button
         cameraBtn = QPushButton('Capture Photo', self)
         cameraBtn.setToolTip('Capture a photo using an attached webcam.')
         cameraBtn.resize(importBtn.width(), importBtn.height())
-        cameraBtn.move(135,105)
+        #cameraBtn.move(135,105)
+        cameraBtn.move(10, 255)
 
         #Draw Test button
         testBtn = QPushButton('System Tools', self)
         testBtn.setToolTip('Test system features.')
         testBtn.resize(importBtn.width(), importBtn.height())
-        testBtn.move(260,105)
+        testBtn.move(10, 305)
         testBtn.clicked.connect(self.diagnostics_click)
+
+        #Draw text box
+        logBox = QPlainTextEdit(self)  #creates the textbox
+        logBox.move(145,userbar.height() + 5)
+        logBox.resize(self.width - 155, (importBtn.height() + cameraBtn.height() + testBtn.height() + 10))
+        logBox.setReadOnly(True)
 
         #Draw window
         self.setWindowTitle(self.title)
@@ -91,6 +100,7 @@ class CCTools(QMainWindow):
     def drawUI(self):
         #Draw statusbar
         self.statusBar().showMessage('System Tools - v.1.0 initial')
+        self.statusBar().setFont(QFont("Arial",9,QFont.Normal))
 
         #Draw label
         header = QLabel('System Tools', self)
@@ -99,10 +109,11 @@ class CCTools(QMainWindow):
         header.move(10,10)
 
         #Draw Diagnostics button
-        diagnosticsBtn = QPushButton('Diagnostics', self)
-        diagnosticsBtn.setToolTip('System diagnostics tools')
+        diagnosticsBtn = QPushButton('Run Image Test', self)
+        diagnosticsBtn.setToolTip('Performs a simple image recognition test')
         diagnosticsBtn.resize(180,45)
         diagnosticsBtn.move(10, header.height()+20)
+        diagnosticsBtn.clicked.connect(self.run_test)
         
         #Draw About button
         aboutBtn = QPushButton('About', self)
@@ -118,6 +129,10 @@ class CCTools(QMainWindow):
         self.show()
 
     #Click listeners
+    @pyqtSlot()
+    def run_test(self):
+        tester.runTest()
+        
     @pyqtSlot()
     def show_about(self):
         CCAbout(self).show()
@@ -141,12 +156,13 @@ class CCAbout(QMainWindow):
 
         #Draw statusbar
         self.statusBar().showMessage('v.1.0 initial')
+        self.statusBar().setFont(QFont("Arial",9,QFont.Normal))
 
         #Draw banner
         banner = QLabel(self)
-        pixmap = QPixmap('cc-plain-big.png')
+        pixmap = QPixmap('cc-pastel-big-resized.png')
         banner.setPixmap(pixmap)
-        banner.resize(pixmap.width(), pixmap.height())
+        banner.resize(pixmap.width(), pixmap.height()) #RESET TO PIXMAP WIDTHxHEIGHT ONCE IMAGE IS EDITED
 
         #Draw header label
         header = QLabel('Project CC', self)
@@ -157,17 +173,19 @@ class CCAbout(QMainWindow):
         #Draw subheader 1
         subHead1 = QLabel('A recognition system specifically designed to determine the condition of an individual’s eyes.'
                          +' By using a scanned image or a photograph, the system can determine the condition of the eye in the given image.', self)
-        subHead1.setWordWrap(True);
+        subHead1.setWordWrap(True)
         subHead1.move(10, (banner.height()+header.height())+15)
-        subHead1.setMinimumSize(self.width, subHead1.height()+10)
+        subHead1.setMinimumSize(self.width-10, subHead1.height()+20)
+        subHead1.setFont(QFont("Arial",9,QFont.Normal))
         subHead1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         #Draw subheader 2
         subHead2 = QLabel('Proponents:\n'
                            + 'Lucky Combinido\nKeysha Pareja\nMark Nolledo', self)
-        subHead2.setWordWrap(True);
+        subHead2.setWordWrap(True)
         subHead2.move(10, banner.height()+(subHead1.height()*2))
-        subHead2.setMinimumSize(self.width, subHead2.height()+20)
+        subHead2.setMinimumSize(self.width, subHead2.height()+25)
+        subHead2.setFont(QFont("Arial",9,QFont.Normal))
         subHead2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         #Draw OK button
