@@ -8,8 +8,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 #Import methods from other scripts
-from sibyl import *
-import test2 as tester
+import detector as detect
 
 class CCMain(QMainWindow):
     #Window initialization
@@ -43,6 +42,7 @@ class CCMain(QMainWindow):
         importBtn.setToolTip('Import an image into the system.')
         importBtn.resize(125,45)
         importBtn.move(10,userbar.height() + 5)
+        importBtn.clicked.connect(self.import_click)
 
         #Draw Camera button
         cameraBtn = QPushButton('Capture Photo', self)
@@ -59,10 +59,13 @@ class CCMain(QMainWindow):
         testBtn.clicked.connect(self.diagnostics_click)
 
         #Draw text box
-        logBox = QPlainTextEdit(self)  #creates the textbox
+        logBox = QLineEdit(self)  #creates the textbox
         logBox.move(145,userbar.height() + 5)
         logBox.resize(self.width - 155, (importBtn.height() + cameraBtn.height() + testBtn.height() + 10))
         logBox.setReadOnly(True)
+
+        def logBox():
+            logBox.setText('Hello World')
 
         #Draw window
         self.setWindowTitle(self.title)
@@ -76,7 +79,7 @@ class CCMain(QMainWindow):
     #Click listeners
     @pyqtSlot()
     def import_click(self):
-        pass
+        detect.getImage(self)
     
     @pyqtSlot()
     def camera_click(self):
@@ -131,7 +134,7 @@ class CCTools(QMainWindow):
     #Click listeners
     @pyqtSlot()
     def run_test(self):
-        tester.runTest()
+        detect.runTest()
         
     @pyqtSlot()
     def show_about(self):
@@ -209,6 +212,7 @@ class CCAbout(QMainWindow):
         self.close()
         
 if __name__ == '__main__':
+    imageSrc = ""
     app = QApplication(sys.argv)
     ex = CCMain()
     sys.exit(app.exec())
